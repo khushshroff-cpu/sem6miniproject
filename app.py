@@ -15,7 +15,7 @@ for i,q in enumerate(questions):
     st.write(f"Q{i+1}: {q['question']}")
     ans = st.radio("Select:", q["options"], index=None, key=i)
     if ans is not None:
-        responses.append(q["scores"][q["options"].index(ans)])
+       responses.append(q["scores"][q["options"].index(ans)])
     else:
         responses.append([0,0,0])
     progress.progress((i+1)/len(questions))
@@ -32,7 +32,19 @@ if st.button("Generate Result"):
         st.success(f"Recommended Path: {result['stream']}")
 
         st.write("### Score Breakdown")
-        st.write(result["scores"])
+        
+        logical, numerical, verbal = result["scores"]
+
+        max_score = max(logical, numerical, verbal, 1)  # avoid division by zero
+        max_score=60
+        st.write(f"🧠 Logical Ability: {logical}")
+        st.progress(logical / max_score)
+
+        st.write(f"🔢 Numerical Ability: {numerical}")
+        st.progress(numerical / max_score)
+
+        st.write(f"🗣️ Verbal Ability: {verbal}")
+        st.progress(verbal / max_score)
 
         st.write("### Career Options")
         for c in result["careers"]:
